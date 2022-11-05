@@ -33,7 +33,7 @@ class seizuretracker(toga.App):
             style=Pack(flex=1,padding=10),
             range=(0,10),
             tick_count = 11,
-            value = 0.0
+            value = 0.0 
         )
         
         main_box.add(label_sleep)
