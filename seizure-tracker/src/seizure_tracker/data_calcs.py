@@ -12,32 +12,28 @@ def risk(value):
     for i in range(7):
         def medication(taken):
             if (taken == False):
-                value = value + .1
+                value = value + .185
                 return value
             return value
 
         def sleep(amount_slept):
             if (amount_slept < 8):
-                value = value + .14
+                value = value + .115
                 return value
             return value
 
         def stress(level):
-            if (level >= 5):
-                value = value + .41
-                return value
+            value = value + (level / 3 * .338)
             return value
 
         def alcohol(consumed):
-            if (consumed == True):
-                value = value + .09
-                return value
+            value = value + (consumed / 3 * .074)
             return value
         
         def menst(current):
             value = 0
             if current == True:
-                value == value + .35
+                value = value + .288
                 return value
             return value
         

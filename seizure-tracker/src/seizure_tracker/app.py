@@ -6,7 +6,7 @@ from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
 import pandas as pd
 import numpy as np
-import data_calcs
+from calculations import data_calc
 
 #from data_calcs import test
 
@@ -18,7 +18,7 @@ class seizuretracker(toga.App):
         main_box = toga.Box(style=Pack(direction=COLUMN))
 
         # Hours of sleep
-        self.sleep_hours = toga.Label('')
+        self.sleep_hours = 0
 
         label_sleep = toga.Label(
             'How many hours of sleep did you get last night (0 - 10 or more)'
@@ -26,11 +26,10 @@ class seizuretracker(toga.App):
 
         # Hours of sleep slider
         def set_hours_of_sleep(widget):
-            self.sleep_hours.text = f"Hours of sleep: {sleep_slider.value}"
-            yield 0
+            self.sleep_hours = sleep_slider.value
         
         sleep_slider = toga.Slider(
-            on_slide = set_hours_of_sleep,
+            on_change = set_hours_of_sleep,
             style=Pack(flex=1,padding=10),
             range=(0,10),
             tick_count = 11,
@@ -39,18 +38,19 @@ class seizuretracker(toga.App):
         
         main_box.add(label_sleep)
         main_box.add(sleep_slider)
-        main_box.add(self.sleep_hours)
 
         # Alcohol consumption
+        self.alcohol_consumption = 0
+
         label_alcohol_consumption = toga.Label(
             'How many alcoholic beverages have you consumed in the past 24 hours? (0 - 3 or more)'
         )
 
-        def get_alcohol_use(widget):
-            print(alcohol_slider.value)
+        def set_alcohol_consumption(widget):
+            self.alcohol_consumption = alcohol_slider.value
         
         alcohol_slider = toga.Slider(
-            on_slide = get_alcohol_use,
+            on_change = set_alcohol_consumption,
             style=Pack(flex=1,padding=10),
             range=(0,3),
             tick_count = 4, # range from 0 to 3 or more
@@ -60,17 +60,18 @@ class seizuretracker(toga.App):
         main_box.add(label_alcohol_consumption)
         main_box.add(alcohol_slider)
 
-        # Alcohol consumption
+        # Stress level
+        self.stress_level = 0
+
         label_stress_level = toga.Label(
-            'How stressed do you feel right now? (None at all to Very Stressed)'
+            'How stressed do you feel right now? (Not at all to Very Stressed)'
         )
 
-        def get_stress_level(widget):
-            print(stress_slider.value)
-            return stress_slider.value
+        def update_stress_level(widget):
+            self.stress_level = stress_slider.value
         
         stress_slider = toga.Slider(
-            on_slide = get_stress_level,
+            on_change = update_stress_level,
             style=Pack(flex=1,padding=10),
             range=(0,3),
             tick_count = 4, # range from 0 to 3 or more
@@ -81,19 +82,33 @@ class seizuretracker(toga.App):
         main_box.add(stress_slider)
 
         # Medication
-        print("Took Medication")
+        self.took_medication = False
 
+        def set_medication_true(widget):
+            self.took_medication = True
+            print(self.took_medication)
+
+        def set_medication_false(widget):
+            self.took_medication = False
+            print(self.took_medication)
+        
         label_medication = toga.Label(
             'Have you taken medication?'
         )
-        
-        box_took_medication = toga.Box() 
-        button_yes_medication = toga.Button('Yes')
-        button_yes_medication.style.padding_top = 20
-        
-        button_no_medication = toga.Button('No')
-        button_no_medication.style.padding_top = 20
 
+        button_yes_medication = toga.Button(
+            'Yes',
+            on_press = set_medication_true,
+            style=Pack(padding_top=20)
+        )
+        
+        button_no_medication = toga.Button(
+            'No',
+            on_press = set_medication_false,
+            style=Pack(padding_top=20)
+        )
+
+        box_took_medication = toga.Box() 
         box_took_medication.add(button_yes_medication)
         box_took_medication.add(button_no_medication)
 
@@ -101,42 +116,59 @@ class seizuretracker(toga.App):
         main_box.add(box_took_medication)
         
         # Menstruation
+        self.menstruating = False
+
+        def set_menstruate_true(widget):
+            self.menstruating = True
+            print(self.menstruating)
+
+        def set_menstruate_false(widget):
+            self.menstruating = False
+            print(self.menstruating)
+        
         label_menstrual_cycle = toga.Label(
             'Are you currently menstruating?'
         )
 
+        button_yes_menstruate = toga.Button(
+            'Yes',
+            on_press=set_menstruate_true,
+            style=Pack(padding_top=20)
+        )
+
+        button_no_menstruate = toga.Button(
+            'No',
+            on_press = set_menstruate_false,
+            style=Pack(padding_top=20)
+        )
+
         box_on_menstrual_cycle = toga.Box() 
-        button_yes_menstrual = toga.Button('Yes')
-        button_yes_menstrual.style.padding_top = 20
-
-        button_no_menstrual = toga.Button('No')
-        button_no_menstrual.style.padding_top = 20
-
-        box_on_menstrual_cycle.add(button_yes_menstrual)
-        box_on_menstrual_cycle.add(button_no_menstrual)
+        box_on_menstrual_cycle.add(button_yes_menstruate)
+        box_on_menstrual_cycle.add(button_no_menstruate)
 
         main_box.add(label_menstrual_cycle)
         main_box.add(box_on_menstrual_cycle)
 
+        #Submit and calculate
+        self.output_label = toga.Label('')
+        self.calculated_risk = 0
+
+        def update_output_label(widget):
+            self.calculated_risk = data_calc.calculate_risk(True, self.took_medication, self.alcohol_consumption, self.stress_level, self.sleep_hours, self.menstruating)
+            self.output_label.text = f"Your risk of having a seizure today is {int(self.calculated_risk)}%"
+        
         button_submit = toga.Button(
-            'Submit',
-            on_press=set_hours_of_sleep,
+            'Calculate Risk',
+            on_press=update_output_label,
             style=Pack(padding_top=20)
         )
-    
+
         main_box.add(button_submit)
+        main_box.add(self.output_label)
 
         self.main_window = toga.MainWindow(title='Seizure Tracker')
         self.main_window.content = main_box
         self.main_window.show()
-
-    def show_output_window(self, widget):
-        label = toga.Label(f"Hours of sleep:")
-        outer_box = toga.Box()
-        self.second_window = toga.Window(title='Result')
-        self.windows.add(self.second_window)
-        self.second_window.content = outer_box
-        self.second_window.show()
 
 def main():
     return seizuretracker()
