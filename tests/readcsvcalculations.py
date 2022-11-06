@@ -11,7 +11,29 @@ stress_lev_data = data['stress level'].tolist()
 sleep_amt_data = data['sleep amount'].tolist()
 menstrual_data = data['menstrual'].tolist()
 
+""""
+# reading CSV file
+data = pd.read_csv("data.csv")
 
+#read CSV
+dataArray = np.loadtxt('data.csv',delimiter=',',names=True)
+
+
+plt.figure()
+for col_name in dataArray.dtype.names:
+    plt.plot(dataArray[col_name], label=col_name)
+plt.legend()
+plt.show()
+
+
+# converting column data to list
+seizure_occurred_data = data['seizure occurred'].tolist()
+med_taken_data = data['medication taken'].tolist()
+alc_cons_data = data['alcohol consumed'].tolist()
+stress_lev_data = data['stress level'].tolist()
+sleep_amt_data = data['sleep amount'].tolist()
+menstrual_data = data['menstrual'].tolist()
+"""
 
 """"
 import pandas.*

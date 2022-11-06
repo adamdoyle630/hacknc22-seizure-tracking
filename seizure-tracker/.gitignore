@@ -67,6 +67,3 @@ django/
 
 # Briefcase log files
 logs/
-
-# test scripts and code
-tests/

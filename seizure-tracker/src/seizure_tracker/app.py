@@ -4,11 +4,7 @@ Seizure Tracking Application
 import toga
 from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
-import pandas as pd
-import numpy as np
 from calculations import data_calc
-
-#from data_calcs import test
 
 class seizuretracker(toga.App):
 
@@ -86,11 +82,9 @@ class seizuretracker(toga.App):
 
         def set_medication_true(widget):
             self.took_medication = True
-            print(self.took_medication)
 
         def set_medication_false(widget):
             self.took_medication = False
-            print(self.took_medication)
         
         label_medication = toga.Label(
             'Have you taken medication?'
@@ -120,11 +114,9 @@ class seizuretracker(toga.App):
 
         def set_menstruate_true(widget):
             self.menstruating = True
-            print(self.menstruating)
 
         def set_menstruate_false(widget):
             self.menstruating = False
-            print(self.menstruating)
         
         label_menstrual_cycle = toga.Label(
             'Are you currently menstruating?'
@@ -150,21 +142,26 @@ class seizuretracker(toga.App):
         main_box.add(box_on_menstrual_cycle)
 
         #Submit and calculate
-        self.output_label = toga.Label('')
-        self.calculated_risk = 0
+        self.calculated_risk_label = toga.Label('')
+        self.risk_trend_label = toga.Label('')
+        self.daily_calculated_risk = 0
+        self.risk_trend = 0
 
-        def update_output_label(widget):
+        def update_output_labels(widget):
             self.calculated_risk = data_calc.calculate_risk(True, self.took_medication, self.alcohol_consumption, self.stress_level, self.sleep_hours, self.menstruating)
-            self.output_label.text = f"Your risk of having a seizure today is {int(self.calculated_risk)}%"
+            self.calculated_risk_label.text = f"Your risk of having a seizure today is {int(self.calculated_risk)}%"
+            self.risk_trend = data_calc.calculate_risk_trend()
+            self.risk_trend_label.text = f"Your average likelihood of a seizure has been {int(self.risk_trend)}%"
         
         button_submit = toga.Button(
             'Calculate Risk',
-            on_press=update_output_label,
+            on_press=update_output_labels,
             style=Pack(padding_top=20)
         )
 
         main_box.add(button_submit)
-        main_box.add(self.output_label)
+        main_box.add(self.calculated_risk_label)
+        main_box.add(self.risk_trend_label)
 
         self.main_window = toga.MainWindow(title='Epilepsy Seizure Tracker')
         self.main_window.content = main_box
