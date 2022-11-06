@@ -159,7 +159,7 @@ class seizuretracker(toga.App):
             self.risk_trend_label.text = f"Your average likelihood of a seizure has been {int(self.risk_trend)}%"
         
         button_submit = toga.Button(
-            'Calculate Risk',
+            'Calculate My Risk',
             on_press=update_output_labels,
             style=Pack(padding_top=20,font_size=12)
         )
