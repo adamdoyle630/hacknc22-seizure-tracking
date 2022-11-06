@@ -8,8 +8,8 @@ author = 'Jane Developer'
 author_email = "jane@hacknc22.com"
 
 [tool.briefcase.app.seizure-tracker]
-formal_name = "seizure-tracker"
-description = "My first application"
+formal_name = "Seizure Tracker"
+description = "App to track and predict seizures for epilepsy"
 icon = "src/seizure_tracker/resources/seizure-tracker"
 sources = ['src/seizure_tracker']
 requires = [
