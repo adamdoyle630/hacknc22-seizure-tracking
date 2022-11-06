@@ -166,7 +166,7 @@ class seizuretracker(toga.App):
         main_box.add(button_submit)
         main_box.add(self.output_label)
 
-        self.main_window = toga.MainWindow(title='Seizure Tracker')
+        self.main_window = toga.MainWindow(title='Epilepsy Seizure Tracker')
         self.main_window.content = main_box
         self.main_window.show()
 

@@ -26,7 +26,7 @@ sleep_amt_data = data['sleep amount'].tolist()
 menstrual_data = data['menstrual'].tolist()
 """
 
-def calculate_risk(seizure_occurred, med_taken, alc_consumed, stress_level, sleep_amount, menstruate) -> float:
+def calculate_risk(seizure_occurred, med_taken, alc_consumed, stress_level, sleep_amount, menstruate):
     """Outputs a percent risk based off of input parameters."""
     print(f"Seizure occurred: {seizure_occurred}")
     print(f"Med Taken: {med_taken}")
@@ -37,7 +37,7 @@ def calculate_risk(seizure_occurred, med_taken, alc_consumed, stress_level, slee
     if sleep_amount < 8:
         value = value + .115
     if menstruate:
-        value == value + .288
+        value = value + .288
     
     value = value + (stress_level / 3 * .338)
     value = value + (alc_consumed / 3 * .074)
