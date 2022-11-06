@@ -100,3 +100,6 @@ local/
 runtime/
 
 .vscode/
+
+# test scripts and code
+tests/
