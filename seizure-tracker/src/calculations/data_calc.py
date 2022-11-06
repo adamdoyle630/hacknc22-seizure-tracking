@@ -18,7 +18,7 @@ def calculate_risk(seizure_occurred, med_taken, alc_consumed, stress_level, slee
 
     return value * 100
 
-def calculate_risk_trend():
+def calculate_risk_trend(daily_risk):
     value = 0
     with open("C:/Users/adamd/personal_workspace/hacknc22/seizure-tracker/src/calculations/data.csv", newline='') as f:
         reader = csv.reader(f)
@@ -33,5 +33,5 @@ def calculate_risk_trend():
             menstruate = row[5]
             value = value + calculate_risk(seizure_occurred, med_taken, alc_consumed, stress_level, sleep_amount, menstruate)
             row_count = row_count + 1
-        
-    return value / row_count
+        value = value + daily_risk
+    return value / row_count + 1
